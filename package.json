@@ -4,17 +4,10 @@
   "description": "convert GLSL files to ES6 modules",
   "main": "dist/rollup-plugin-shader.js",
   "module": "dist/rollup-plugin-shader.esm.js",
-  "jest": {
-    "verbose": true,
-    "roots": [
-      "<rootDir>/test/"
-    ],
-    "testRegex": ".*\\.(test|spec)\\.jsx?$"
-  },
   "scripts": {
     "lint": "eslint --fix .",
     "build": "rollup -c ./rollup.config.js",
-    "test": "jest"
+    "test": "npm run build && rollup -c rollup-test.config.js"
   },
   "author": "Jiulong Hu <me@hujiulong.com>",
   "license": "MIT",
@@ -26,16 +19,15 @@
     "url": "https://github.com/hujiulong/rollup-plugin-shader/issues"
   },
   "homepage": "https://github.com/hujiulong/rollup-plugin-shader#readme",
+  "dependencies": {
+    "rollup-pluginutils": "^2.8.2"
+  },
   "devDependencies": {
-    "@hujiulong/eslint-config": "^0.0.5",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.0",
-    "jest": "^22.4.2",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.3"
-  },
-  "dependencies": {
-    "rollup-pluginutils": "^2.0.1"
+    "eslint": "^9.16.0",
+    "mocha": "^10.8.2",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-mocha": "^0.0.1"
   }
 }

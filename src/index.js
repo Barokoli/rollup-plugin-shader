@@ -2,6 +2,8 @@ import {
     createFilter
 } from 'rollup-pluginutils';
 
+import {parse} from "./parser"
+
 function glsl( {
 	include = [ '**/*.glsl', '**/*.vs', '**/*.fs' ],
 	exclude,
@@ -12,9 +14,12 @@ function glsl( {
 
     return {
 
+        name: 'shader postprocessor',
         transform( code, id ) {
 
             if ( !filter( id ) ) return;
+
+            this.addWatchFile(id);
 
 			if ( removeComments ) {
 				code = code.replace( /[ \t]*\/\/.*\n/g, '' ) // remove //
@@ -22,10 +27,15 @@ function glsl( {
     				.replace( /\n{2,}/g, '\n' ) // # \n+ to \n
 			}
 
-			const transformedCode = `export default ${ JSON.stringify( code ) };`;
+            const parsedMap = parse(code);
+
+            let transformed = ""
+            for (const [name, content] of Object.entries(parsedMap)) {
+                transformed += "\n" + `export const ${name} = ${ JSON.stringify(content) }`
+            }
 
             return {
-                code: transformedCode,
+                code: transformed,
                 map: {
                     mappings: ''
                 }
