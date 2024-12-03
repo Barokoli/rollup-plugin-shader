@@ -13,30 +13,64 @@ export function parse(fullText) {
     // console.log(`Top level: \n${topLevel}\n_____________________`)
     // console.log(`Variables:`)
     // console.log(variables)
-    const funcs = getMainFunctions(fullText)
+    const baseFuncs = getMainFunctions(fullText)
 
     const result = {}
-    for(const [name, obj] of Object.entries(funcs)) {
+    for (const [name, obj] of Object.entries(baseFuncs)) {
         // console.log(`Func ${name}, params: ${obj.params}.`)
         if (!obj.params) {
             let r = defines
-            const body = getFunction(fullText, obj.idx, curlMap, [name, "main"])
-            for(const v of variables) {
-                if(body.includes(v.name)) {
+
+            const funcs = {}
+
+            for (const [fname, fobj] of Object.entries(baseFuncs)) {
+                funcs[fname] = {
+                    name: fname,
+                    body: getFunction(fullText, fobj.idx, curlMap, fname === name ? [name, "main"] : undefined),
+                    deps: [],
+                    added: false
+                }
+            }
+
+            for (const [fname, fobj] of Object.entries(funcs)) {
+                for (const [other, oobj] of Object.entries(funcs)) {
+                    if (other !== fname && funcs[fname].body.includes(other)) {
+                        funcs[fname].deps.push(funcs[other])
+                    }
+                }
+            }
+
+            // for (const [fname, fobj] of Object.entries(funcs)) {
+            //     console.log(`${fname} deps -> [${funcs[fname].deps.map((e) => e.name).join(',')}]`)
+            // }
+
+            function addDeps(name, res) {
+                // console.log(funcs[name].deps)
+                if(funcs[name].added) {
+                    return
+                }
+                if (funcs[name].deps.length === 0 && !funcs[name].added) {
+                    res.value += funcs[name].body
+                    funcs[name].added = true
+                } else {
+                    for (const dep of funcs[name].deps) {
+                        addDeps(dep.name, res)
+                    }
+                    res.value += "\n" + funcs[name].body
+                    funcs[name].added = true
+                }
+            }
+
+            const res = {value: ""}
+            addDeps(name, res, "main")
+
+            for (const v of variables) {
+                if (res.value.includes(v.name)) {
                     r += "\n" + v.full
                 }
             }
 
-            for(const [fname, fobj] of Object.entries(funcs)) {
-                if (fname === name) {
-                    continue
-                }
-                if(body.includes(fname)) {
-                    r += "\n" + getFunction(fullText, fobj.idx, curlMap)
-                }
-            }
-
-            result[name] = r + "\n" + body
+            result[name] = r + "\n" + res.value
         }
     }
     return result

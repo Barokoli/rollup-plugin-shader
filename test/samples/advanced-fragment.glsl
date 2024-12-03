@@ -18,9 +18,6 @@ uniform sampler2D shadowMap;
 uniform float fadeFactor; //Higher the Value to increase transparency
 
 
-
-
-
 #ifndef saturate
 #define saturate( a ) clamp( a, 0.0, 1.0 )
 #endif
@@ -61,20 +58,15 @@ void innerCircle() {
         discard;
     }
     if(sum.w == 1.0){
-        gl_FragColor = vec4(texColor.rgb,0.0);
+        gl_FragColor = vec4(texColor.rgb, 0.0);
     }else{
-        gl_FragColor = vec4(texColor.rgb,1.0);
+        gl_FragColor = vec4(texColor.rgb, 1.0);
     }
 }
 
 
 uniform float innerCutOut;
 uniform float ringSize;
-uniform float ringSize;
-
-#ifndef saturate
-#define saturate( a ) clamp( a, 0.0, 1.0 )
-#endif
 
 vec4 myLinearTosRGB( in vec4 value ) {
     return vec4( mix( pow( value.rgb, vec3( 0.41666 ) ) * 1.055 - vec3( 0.055 ), value.rgb * 12.92, vec3( lessThanEqual( value.rgb, vec3( 0.0031308 ) ) ) ), value.a );

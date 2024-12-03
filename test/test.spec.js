@@ -21,7 +21,6 @@ describe( 'import GLSL files', () => {
 
         result = await bundle('../test/samples/advanced-fragment.glsl');
         code = result.output[0].code;
-        console.log(code)
-
+        console.log(code.split(/\\n/).join('\n'))
     })
 })

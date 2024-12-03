@@ -4,6 +4,7 @@
   "description": "convert GLSL files to ES6 modules",
   "main": "dist/rollup-plugin-shader.js",
   "module": "dist/rollup-plugin-shader.esm.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint --fix .",
     "build": "rollup -c ./rollup.config.js",
