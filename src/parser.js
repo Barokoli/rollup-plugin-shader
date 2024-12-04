@@ -87,7 +87,7 @@ function getFunction(ft, idx, curlMap, replace=undefined) {
 }
 
 function extractVars(ft) {
-    const re = /^\s*(\w+)\s+(\w[\w\d_]*)\s+(\w[\w\d_]*);/gm
+    const re = /^\s*(\w+)\s+(\w[\w\d_]*)\s+(\w[\w\d_]*)(?:\[[\d\*\\\w_\s]+\])?;/gm
     let m;
 
     const vars = [];
