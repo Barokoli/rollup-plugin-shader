@@ -1,4 +1,4 @@
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 
 const pkg = require( './package.json' );
 
@@ -18,6 +18,9 @@ export default {
             sourcemap: true
         }
     ],
-    plugins: [ babel() ],
+    plugins: [ babel({
+        babelHelpers: 'runtime',
+        presets: ['@babel/preset-env']
+    }) ],
     external: external
 };

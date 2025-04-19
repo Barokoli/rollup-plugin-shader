@@ -24,11 +24,13 @@
     "rollup-pluginutils": "^2.8.2"
   },
   "devDependencies": {
-    "babel-core": "^4.7.16",
-    "babel-preset-env": "^0.0.0",
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-runtime": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/runtime": "^7.27.0",
+    "@rollup/plugin-babel": "^6.0.4",
     "eslint": "^9.16.0",
     "mocha": "^10.8.2",
-    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-mocha": "^0.0.1"
   }
 }
