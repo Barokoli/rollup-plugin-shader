@@ -7,7 +7,8 @@ import {parse} from "./parser"
 function glsl( {
 	include = [ '**/*.glsl', '**/*.vs', '**/*.fs' ],
 	exclude,
-	removeComments = true
+	removeComments = true,
+    singeFuncMode = false
 } = {} ) {
 
     const filter = createFilter( include, exclude );
@@ -27,11 +28,16 @@ function glsl( {
     				.replace( /\n{2,}/g, '\n' ) // # \n+ to \n
 			}
 
-            const parsedMap = parse(code);
 
             let transformed = ""
-            for (const [name, content] of Object.entries(parsedMap)) {
-                transformed += "\n" + `export const ${name} = ${ JSON.stringify(content) }`
+            if (!singeFuncMode) {
+                const parsedMap = parse(code);
+
+                for (const [name, content] of Object.entries(parsedMap)) {
+                    transformed += "\n" + `export const ${name} = ${JSON.stringify(content)}`
+                }
+            } else {
+                transformed += "\n" + `export default \`${code}\``
             }
 
             return {
