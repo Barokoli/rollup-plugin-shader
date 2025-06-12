@@ -8,7 +8,7 @@ function glsl( {
 	include = [ '**/*.glsl', '**/*.vs', '**/*.fs' ],
 	exclude,
 	removeComments = true,
-    singeFuncMode = false
+    singleFuncMode = false
 } = {} ) {
 
     const filter = createFilter( include, exclude );
@@ -30,7 +30,7 @@ function glsl( {
 
 
             let transformed = ""
-            if (!singeFuncMode) {
+            if (!singleFuncMode) {
                 const parsedMap = parse(code);
 
                 for (const [name, content] of Object.entries(parsedMap)) {
